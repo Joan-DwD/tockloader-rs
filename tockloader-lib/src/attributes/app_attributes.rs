@@ -44,8 +44,7 @@ impl AppAttributes {
             tbf_header: header_data,
             tbf_footers: footers_data,
         }
-    }
-      
+    }     
     ///     Reads attributes from all the applications flashed on the board.
     ///     The function below is used to retrieve header and footer data
     ///     Starting from the 0x40000 address,
