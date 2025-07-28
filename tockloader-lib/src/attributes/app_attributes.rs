@@ -45,28 +45,28 @@ impl AppAttributes {
             tbf_footers: footers_data,
         }
     }
-    /// Reads from all the applications flashed on the board.
-    /// The function below is used to retrieve header and footer data
-    /// Starting from the 0x40000 address,
-    /// we read the very first 8 bytes to determine:
-    /// - tbf-version
-    /// - header_size
-    /// - total_size
-    /// using the parse_tbf_header_lengths function,
-    /// Afterward, with the header_size we just read,
-    /// we read the the rest of the header information using the same function
-    /// then, we save the end of our binary app which marks the total size of the app and the start of the footer.
-    /// Now, we calculate the total size of the footer step by step:
+    ///   The function below is used to retrieve header and footer data
+    ///   Starting from the 0x40000 address,
+    ///   we read the very first 8 bytes to determine:
+    ///   Reads from all the applications flashed on the board.
+    ///   - tbf-version
+    ///   - header_size
+    ///   - total_size
+    ///   using the parse_tbf_header_lengths function,
+    ///   Afterward, with the header_size we just read,
+    ///   we read the the rest of the header information using the same function
+    ///   then, we save the end of our binary app which marks the total size of the app and the start of the footer.
+    ///   Now, we calculate the total size of the footer step by step:
     /// 1. Using the known end of the binary (from the header's total_size),
     /// 2. Subtracting the size of any previously read footers,
     /// 3. Finally, accounting for the extra 4 bytes (2 bytes for type, 2 for length) for each footer entry.
-    /// We compute the exact offset where the current footer begins using the below relation:
-    /// footer_offset = binary_offset + previous_footer_size + 4
-    /// Using this offset, we read the correct number of bytes from memory,
-    /// construct a TbfFooter struct from the raw bytes, and store it.
-    /// Once all footers for an app are gathered,
-    /// we wrap the header, footers, and other metadata into an `AppAttributes` struct,
-    /// and push it into the apps_details vector, which holds info for all flashed applications
+    ///   We compute the exact offset where the current footer begins using the below relation:
+    ///   footer_offset = binary_offset + previous_footer_size + 4
+    ///   Using this offset, we read the correct number of bytes from memory,
+    ///   construct a TbfFooter struct from the raw bytes, and store it.
+    ///   Once all footers for an app are gathered,
+    ///   we wrap the header, footers, and other metadata into an `AppAttributes` struct,
+    ///   and push it into the apps_details vector, which holds info for all flashed applications
     pub(crate) fn read_apps_data_probe(
         board_core: &mut Core,
         addr: u64,
