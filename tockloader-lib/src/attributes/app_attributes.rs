@@ -12,18 +12,18 @@ use tokio_serial::SerialStream;
 use crate::bootloader_serial::{issue_command, Command, Response};
 use crate::errors::TockloaderError;
 
-/// Structure used to package an app's header and footer data.
-/// This structure is used to package together all relevant information like metadata about an app.
-/// The information is usually stored within a [TbfHeader], and one or more [TbfFooters](TbfFooterV2Credentials).
-/// For more details see <https://book.tockos.org/doc/tock_binary_format>
+///     Structure used to package an app's header and footer data.
+///     This structure is used to package together all relevant information like metadata about an app.
+///     The information is usually stored within a [TbfHeader], and one or more [TbfFooters](TbfFooterV2Credentials).
+///     For more details see <https://book.tockos.org/doc/tock_binary_format>
 #[derive(Debug)]
 pub struct AppAttributes {
     pub tbf_header: TbfHeader,
     pub tbf_footers: Vec<TbfFooter>,
 }
 
-/// Structure used to package a footers credential data and the size of the footer.
-/// This is where credentials of the footer is stored
+///     Structure used to package a footers credential data and the size of the footer.
+///     This is where credentials of the footer is stored
 #[derive(Debug)]
 pub struct TbfFooter {
     pub credentials: TbfFooterV2Credentials,
@@ -45,28 +45,28 @@ impl AppAttributes {
             tbf_footers: footers_data,
         }
     }
-    /// from all the applications flashed on the board.
-    /// The function below is used to retrieve header and footer data
-    /// Starting from the 0x40000 address,
-    /// we read the very first 8 bytes to determine:
-    /// - tbf-version
-    /// - header_size
-    /// - total_size
-    /// using the parse_tbf_header_lengths function,
-    /// Afterward, with the header_size we just read,
-    /// we read the the rest of the header information using the same function
-    /// then, we save the end of our binary app which marks the total size of the app and the start of the footer.
-    /// Now, we calculate the total size of the footer step by step:
+    ///     from all the applications flashed on the board.
+    ///     The function below is used to retrieve header and footer data
+    ///     Starting from the 0x40000 address,
+    ///     we read the very first 8 bytes to determine:
+    ///     - tbf-version
+    ///     - header_size
+    ///     - total_size
+    ///     using the parse_tbf_header_lengths function,
+    ///     Afterward, with the header_size we just read,
+    ///     we read the the rest of the header information using the same function
+    ///     then, we save the end of our binary app which marks the total size of the app and the start of the footer.
+    ///     Now, we calculate the total size of the footer step by step:
     /// 1. Using the known end of the binary (from the header's total_size),
     /// 2. Subtracting the size of any previously read footers,
     /// 3. Finally, accounting for the extra 4 bytes (2 bytes for type, 2 for length) for each footer entry.
-    /// We compute the exact offset where the current footer begins using the below relation:
-    ///     footer_offset = binary_offset + previous_footer_size + 4
-    /// Using this offset, we read the correct number of bytes from memory,
-    /// construct a TbfFooter struct from the raw bytes, and store it.
-    /// Once all footers for an app are gathered,
-    /// we wrap the header, footers, and other metadata into an `AppAttributes` struct,
-    /// and push it into the apps_details vector, which holds info for all flashed applications
+    ///    We compute the exact offset where the current footer begins using the below relation:
+    ///    footer_offset = binary_offset + previous_footer_size + 4
+    ///    Using this offset, we read the correct number of bytes from memory,
+    ///    construct a TbfFooter struct from the raw bytes, and store it.
+    ///    Once all footers for an app are gathered,
+    ///    we wrap the header, footers, and other metadata into an `AppAttributes` struct,
+    ///    and push it into the apps_details vector, which holds info for all flashed applications
     pub(crate) fn read_apps_data_probe(
         board_core: &mut Core,
         addr: u64,

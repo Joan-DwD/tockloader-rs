@@ -18,6 +18,7 @@
 /// 2. arch: CPU architecture
 /// 3. appaddr: Application memory start address
 /// 4. boothash: Bootloader integrity checksum
+///     
 /// This structure used to hold the data of the attributes region at the 0x600-0x9FF range
 #[derive(Debug)]
 pub struct DecodedAttribute {
@@ -33,18 +34,17 @@ impl DecodedAttribute {
         }
     }
 }
-
 /// Function used to decode 64 byte chunks from the attributes region at the 0x600-0x9FF range
 /// Each attribute follows this layout:
 /// 1. Bytes 0–7: UTF-8 key string
 /// 2. Byte 8: Value length (1–55)
-/// 2. Bytes 9–63: UTF-8 value string
+/// 3. Bytes 9–63: UTF-8 value string
 ///
 /// The function returns:
 /// - `Some(DecodedAttribute)` containing the parsed key and value if valid
 /// - `None` if:
-///   - The value length is zero or exceeds 55 bytes (corrupt or uninitialized)
-///   - The value contains invalid UTF-8 data
+/// - The value length is zero or exceeds 55 bytes (corrupt or uninitialized)
+/// - The value contains invalid UTF-8 data
 ///
 /// Panics
 /// This function panics if the input step is less than 64 bytes.
@@ -78,9 +78,9 @@ pub(crate) fn decode_attribute(step: &[u8]) -> Option<DecodedAttribute> {
     Some(DecodedAttribute::new(key, value))
 }
 
-/// Function used to decode utf-8 encoded bytes and return them as Strings
 /// Specifically used in the read_system_attributes fn from the system_attributes.rs
 /// to decode the bytes of the sentinel kernel attribute.
+/// Function used to decode utf-8 encoded bytes and return them as Strings
 pub(crate) fn bytes_to_string(raw: &[u8]) -> String {
     let decoder = utf8_decode::Decoder::new(raw.iter().cloned());
 
