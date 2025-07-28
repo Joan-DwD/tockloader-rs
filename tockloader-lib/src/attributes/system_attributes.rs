@@ -42,7 +42,7 @@ impl SystemAttributes {
             kernel_bin_len: None,
         }
     }
- /// This function is used to read relevent data regarding the kernel and the board
+    /// This function is used to read relevent data regarding the kernel and the board
     /// Firstly we read the bytes between 0x600-0x9FF as 16x 64-byte key-value entries (1024 bytes),
     /// that describe the board and the software running on it.
     /// format per entry:

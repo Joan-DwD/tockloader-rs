@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 // Copyright OXIDOS AUTOMOTIVE 2024.
 
-
 /// Attributes are key-value pairs that describe hardware configuration, stored in a fixed 64-byte format:
 /// 1. 8-byte null-padded UTF-8 key (e.g., "board__\0\0")
 /// 2. 1-byte value length (1-55)

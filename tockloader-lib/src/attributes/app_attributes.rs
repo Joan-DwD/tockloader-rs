@@ -13,7 +13,7 @@ use crate::bootloader_serial::{issue_command, Command, Response};
 use crate::errors::TockloaderError;
 
 /// Structure used to package an app's header and footer data.
-/// This structure is used to package together all relevant information like metadata about an app. 
+/// This structure is used to package together all relevant information like metadata about an app.
 /// The information is usually stored within a [TbfHeader], and one or more [TbfFooters](TbfFooterV2Credentials).
 /// For more details see <https://book.tockos.org/doc/tock_binary_format>
 #[derive(Debug)]
